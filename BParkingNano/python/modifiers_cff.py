@@ -5,3 +5,4 @@ DiEle =  cms.Modifier()
 
 triggerMatchingStudy = cms.Modifier()
 efficiencyStudy = cms.Modifier()
+regressionVars = cms.Modifier()
