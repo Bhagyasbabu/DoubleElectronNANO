@@ -4,59 +4,26 @@ The focus is on RK/K*/phi analyses.
 
 ## Recipe
 
-This recipe is for 13_3_0, based on original working on 12_4_X. The original recipe for 10_2_X can be found [here](https://github.com/CMSBParking/BParkingNANO/blob/master/README.md).
+This recipe is for CMSSW_14_0_18, based on the updated working on 13_3_0 which is based on original working on 12_4_X. The original recipe for 10_2_X can be found [here](https://github.com/CMSBParking/BParkingNANO/blob/master/README.md).
 
-Currently using release CMSSW_13_3_0 to be able to run on 2023 samples and to run EgammaPostRecoTools with the correct weights for Run 3 noIso MVA electron ID.
+Currently using release CMSSW_14_0_18 to be able to run on 2024 samples and to run EgammaPostRecoTools with the correct weights for Run 3 noIso MVA electron ID.
 
 ### Getting started
 
 ```shell
-scram list CMSSW
-cmsrel CMSSW_13_3_0
-cd CMSSW_13_3_0/src
+cmsrel CMSSW_14_0_18
+cd CMSSW_14_0_18/src
 cmsenv
+git cms-merge-topic -u pviscone:14_0_18_dpee-refitter
+git clone -b dpee git@github.com:pviscone/EgammaPostRecoTools.git EgammaUser/EgammaPostRecoTools
+git clone -b 14_0_18 git@github.com:pviscone/DoubleElectronNANO.git PhysicsToolsTemp
+mv PhysicsToolsTemp/BParkingNano PhysicsTools
+rm -rf PhysicsToolsTemp
+scram b -j `nproc`
 ```
 
-### Add modifications needed to use post-fit quantities for electrons
-
+### Run on a test file
 ```shell
-git cms-merge-topic -u DiElectronX:GsfTransientTracks_124X # unsafe checkout (no checkdeps), but suggested here
-```
-
-### Add modifications to KinematicParticleVertexFitter
-
-```shell
-git cms-merge-topic -u DiElectronX:fixKinParticleVtxFitter_124X # unsafe checkout (no checkdeps), but suggested here
-```
-
-### Add the DoubleElectronNANO package
-
-```shell
-git clone -b dev git@github.com:noepalm/DoubleElectronNANO.git ./PhysicsTools
-```
-
-### Add fixed NanoAOD 130X module + isolation and iso-correction for lowPt electrons
-
-```shell
-git cms-merge-topic -u noepalm:DoubleElectronNANO_nanoaodFix_leptonIso_1330  # unsafe checkout (no checkdeps), but suggested here
-```
-
-### Add CMSSW changes necessary to (optionally) save all NANOAOD collections in the event
-```shell
-git cms-merge-topic -u Pmeiring:dev_allNanoColl_cmssw1330  # unsafe checkout (no checkdeps), but suggested here
-```
-
-### Adding EgammaPostRecoTools for Run 3 noIso electron ID fix
-
-```shell
-git clone git@github.com:cms-egamma/EgammaPostRecoTools.git EgammaUser/EgammaPostRecoTools
-```
-
-### Build and run on a test file
-
-```shell
-cd $CMSSW_BASE/src/
-scram b -j 8
 cd PhysicsTools/BParkingNano/test
 cmsRun run_nano_cfg.py        # by default, runs over Run 3 2023 data
 cmsRun run_nano_cfg.py isMC=1 # runs over BuToKJPsi_JPsiToEE MC for 2023

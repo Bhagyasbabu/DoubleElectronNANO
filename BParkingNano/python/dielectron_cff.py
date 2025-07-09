@@ -10,7 +10,7 @@ electronPairs = cms.EDProducer(
     lep2Selection = cms.string(''),
     filterBySelection = cms.bool(True),
     preVtxSelection = cms.string(
-        f'mass() > 0 && charge() == 0 && userFloat("lep_deltaR") > {electronsForAnalysis.drForCleaning.value()}'  
+        f'mass() > 0 && charge() == 0 && userFloat("lep_deltaR") > {electronsForAnalysis.drForCleaning.value()}'
         # '&& abs(userCand("l1").vz - userCand("l2").vz) <= 1.'
     ),
     postVtxSelection = cms.string('userFloat("sv_chi2") < 998 && userFloat("sv_prob") > 1.e-5'),
@@ -23,7 +23,7 @@ countDiElectrons = cms.EDFilter(
     minNumber = cms.uint32(1),
 )
 
-electronPairsTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
+electronPairsTable = cms.EDProducer("SimpleCompositeCandidateFlatTableProducer",
     src = cms.InputTag('electronPairs:SelectedDiLeptons'),
     cut = cms.string(""),
     name= cms.string("DiElectron"),
@@ -58,7 +58,7 @@ electronPairsTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
 )
 
 DiElectronSequence = cms.Sequence(
-    electronPairs + 
+    electronPairs +
     countDiElectrons +
     electronPairsTable
 )
@@ -83,7 +83,7 @@ DiElectronSequence = cms.Sequence(
 
 from PhysicsTools.BParkingNano.modifiers_cff import *
 
-efficiencyStudy.toModify(electronPairs, 
+efficiencyStudy.toModify(electronPairs,
     filterBySelection = cms.bool(False),
 )
 
