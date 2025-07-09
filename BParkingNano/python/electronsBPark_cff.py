@@ -119,7 +119,7 @@ countTrgElectrons = cms.EDFilter(
 # )
 
 # Saving analysis electrons
-electronBParkTable = cms.EDProducer("SimplePATElectronFlatTableProducer",
+electronBParkTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
  src = cms.InputTag("electronsForAnalysis:SelectedElectrons"),
  cut = cms.string(""),
     name= cms.string("Electron"),
